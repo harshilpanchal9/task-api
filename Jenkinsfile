@@ -24,6 +24,8 @@ pipeline {
         stage('Snyk SAST + SCA') {
             steps {
                sh '''
+                    npm config set prefix '/var/jenkins_home/.npm-global'
+                    export PATH=/var/jenkins_home/.npm-global/bin:$PATH
                     npm install -g snyk
                     snyk auth $SNYK_TOKEN
                     snyk test --all-sub-projects || true
