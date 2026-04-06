@@ -53,11 +53,11 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 sh '''
+                    export KUBECONFIG=/var/jenkins_home/.kube/config
                     kubectl apply -f k8s/configmap.yaml
                     kubectl apply -f k8s/deployment.yaml
                     kubectl apply -f k8s/service.yaml
-                    kubectl set image deployment/task-api \
-                        task-api=$DOCKER_IMAGE:$BUILD_NUMBER
+                    kubectl set image deployment/task-api task-api=$DOCKER_IMAGE:$BUILD_NUMBER
                     kubectl rollout status deployment/task-api
                 '''
             }
