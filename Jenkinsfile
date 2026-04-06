@@ -23,10 +23,13 @@ pipeline {
 
         stage('Snyk SAST + SCA') {
             steps {
-                sh 'npm install -g snyk'
-                sh 'snyk auth $SNYK_TOKEN'
-                sh 'snyk test --all-sub-projects || true'
-                sh 'snyk code test || true'
+                sh '''
+                    apt-get update && apt-get install -y nodejs npm
+                    npm install -g snyk
+                    snyk auth $SNYK_TOKEN
+                    snyk test --all-sub-projects || true
+                    snyk code test || true
+                '''
             }
         }
 
