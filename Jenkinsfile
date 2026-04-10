@@ -65,8 +65,10 @@ pipeline {
         stage('Health Check') {
             steps {
                 sh '''
+                    MINIKUBE_IP=$(kubectl --kubeconfig=/var/jenkins_home/.kube/config get nodes -o jsonpath='{.items[0].status.addresses[0].address}')
+                    echo "Minikube IP: $MINIKUBE_IP"
                     sleep 10
-                    curl -f http://192.168.49.2:30080/health
+                    curl -f http://$MINIKUBE_IP:30080/health
                 '''
             }
         }
